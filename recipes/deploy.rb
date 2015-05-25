@@ -31,17 +31,17 @@ deploy_revision node[:app][:deploy_to] do
 
   before_restart do
 
-    dir = release_path
+    workspace_path = release_path
 
     ruby_exec 'Bundle install' do
-      release_path dir
+      dir workspace_path
       code %(
         bundle install --path #{node[:app][:deploy_to]}/#{node[:app][:shared_path]}/bundle
       )
     end
 
     ruby_exec 'Migrate db' do
-      release_path dir
+      dir workspace_path
       code %(
         bundle exec rake db:create RAILS_ENV=#{node[:app][:rails_env]}
         bundle exec rake db:migrate RAILS_ENV=#{node[:app][:rails_env]}
@@ -49,14 +49,14 @@ deploy_revision node[:app][:deploy_to] do
     end
 
     ruby_exec 'Sunspot reindex' do
-      release_path dir
+      dir workspace_path
       code %(
         bundle exec rake sunspot:reindex RAILS_ENV=#{node[:app][:rails_env]}
       )
     end
 
     ruby_exec 'Bower install and Assets precompile' do
-      release_path dir
+      dir workspace_path
       code %(
         bundle exec rake bower:install:deployment RAILS_ENV=#{node[:app][:rails_env]}
         bundle exec rake assets:precompile RAILS_ENV=#{node[:app][:rails_env]}
