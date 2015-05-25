@@ -1,0 +1,7 @@
+production:
+  adapter: postgresql
+  host: <%= node[:app][:db][:host] %>
+  database: <%= node[:app][:db][:database] %>
+  username: <%= node[:app][:db][:username] %>
+  password: <%= node[:app][:db][:password] %>
+  timeout: 5000
