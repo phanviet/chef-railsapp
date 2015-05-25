@@ -29,6 +29,7 @@ upload_template "#{node[:app][:config_path]}/database.yml" do
   source 'database.yml.erb'
 end
 
+include_recipe 'application-monit'
 include_recipe 'application-nginx'
 include_recipe 'application-unicorn'
 include_recipe 'application-sidekiq'
